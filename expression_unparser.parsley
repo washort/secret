@@ -3,10 +3,10 @@ Lambda(@params @expr) = prec(15) --> lambda $params: $expr
 kwarg = Pair(@k @v) --> $k=$v
 param = kwarg | (@p -> p)
 Parameters() -> ""
-Parameters([param*:ps]) -> ', '.join(ps)
-Parameters([param*:ps] @starkw) -> ', '.join(ps + ["**" + starkw])
-Parameters([param*:ps] @star null) -> ', '.join(ps + ["*" + star])
-Parameters([param*:ps] @star @starkw) -> ', '.join(ps + ["*" + star, "**" + starkw])
+Parameters([param*:ps]) -> ', '.join(str(p) for p in ps)
+Parameters([param*:ps] @starkw) -> ', '.join([str(p) for p in ps] + ["**" + starkw])
+Parameters([param*:ps] @star null) -> ', '.join([str(p) for p in ps] + ["*" + star])
+Parameters([param*:ps] @star @starkw) -> ', '.join([str(p) for p in ps] + ["*" + star, "**" + starkw])
 
 
 IfExp(@cond @left @right) = prec(14) --> if $cond then $left else $right

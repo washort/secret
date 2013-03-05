@@ -127,8 +127,13 @@ Decorated(@ds @f) {{{
 $ds
 $f
 }}}
-docstring_suite = [Str(@prefix @docstring) transform*:rest] -> [(prefix or '') + '"""\n' + repr(docstring)[1:-1].replace('\\"', '"').replace('"""', '\"\"\"') + '\n"""'] + rest
-docstring_suite = @suite
+docstring_suite = ([Str(@prefix @docstring) transform*:rest]
+                       -> [(prefix or '') + '"""\n' + repr(docstring)[1:-1]
+                                                         .replace('\\"', '"')
+                                                         .replace('"""', '\"\"\"')
+                                                    + '\n"""'] + rest
+                  | [transform*:exprs] -> exprs)
+
 
 Class(@name null docstring_suite:suite) {{{
 class $name:

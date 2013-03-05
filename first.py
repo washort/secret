@@ -125,7 +125,7 @@ class PythonParser(OMeta.makeGrammar(g, name="PythonParser")
             # and repack.
             for term in trailers:
                 repacked = (atom,) + term.args[1:]
-                atom = Term(term.tag, term.data, repacked, term.span)
+                atom = Term(term.tag, term.data, repacked)
 
         return atom
 
@@ -172,7 +172,7 @@ class PrecedenceTransformer(TreeTransformerBase):
 
         pt = PrecedenceTemplate(self.nextPrecedence, output)
         self.nextPrecedence = None
-        return pt
+        return pt, None
 
 PythonExpressionUnparser = TreeTransformerGrammar.makeGrammar(
     open("expression_unparser.parsley").read(),
@@ -186,11 +186,10 @@ PythonStatementUnparser = TreeTransformerGrammar.makeGrammar(
 
 if __name__ == "__main__":
     from terml.parser import parseTerm as term
-    # f = open(sys.argv[1]).read()
+    f = open(sys.argv[1]).read()
     g = wrapGrammar(PythonParser)
-    stmts = g(sys.argv[1] + '\n').file_input()
+    stmts = g(f).file_input()
     from pprint import pprint
     pprint(stmts)
-#    import pdb; pdb.set_trace()
     pt = PythonStatementUnparser.transform(stmts)[0]
     print pt
